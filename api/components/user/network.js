@@ -16,6 +16,7 @@ const list = async (req, res, next) => {
 const get = async (req, res, next) => {
    try {
       const user = await controller.get(req.params.id);
+      console.log(user);
       response.success(req, res, user, 200);
    } catch(err) {
       next(err)
@@ -30,7 +31,8 @@ const upsert = async (req, res, next) => {
    //    })
    //    .catch(next)
    try {
-      const user = await controller.insert(body);
+      const user = await controller.upsert(body);
+      console.log(user);
       response.success(req, res, user, 201);
    } catch(err) {
       next(err)

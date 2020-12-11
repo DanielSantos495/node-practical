@@ -47,7 +47,70 @@ const list = table => {
    });
 }
 
+const get = (table, id) => {
+   return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM ${table} WHERE id = '${id}'`, async (error, data) => {
+         if (error) {
+            reject(error);
+         }
+         resolve(data);
+      });
+   });
+}
+
+
+
+const insert = (table, data) => {
+   return new Promise((resolve, reject) => {
+      /*El '?' despúes de SET es un comodín que nos completa toda la expresión y data es el valor */
+      connection.query(`INSERT INTO ${table} SET ?`, data, async (error, result) => {
+         if (error) {
+            reject(error);
+         }
+         resolve(result);
+      });
+   })
+}
+
+const update = (table, data) => {
+   return new Promise((resolve, reject) => {
+      /*El '?' despúes de SET es un comodín que nos completa toda la expresión y data es el valor */
+      connection.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, data.id], async (error, result) => {
+         if (error) {
+            reject(error);
+         }
+         console.log(data)
+         resolve(result);
+      });
+   })
+}
+
+const upsert = async (table, data) => {
+   const be = await get(table, data.id);
+   if(be.length > 0) {
+      console.log('update')
+      return update(table, data)
+   } else {
+      console.log('post normal')
+      return insert(table, data);
+   }
+}
+
+const query = (table, query) => {
+   return new Promise((resolve, reject) => {
+      /*El '?' despúes de WHERE es un comodín que nos completa toda la expresión y data es el valor */
+      connection.query(`SELECT * FROM ${table} WHERE ?`, query, (error, data) => {
+         if (error) {
+            reject(error);
+         }
+         resolve(data[0] || null);
+      })
+   })
+}
 
 module.exports = {
    list,
+   get,
+   upsert,
+   query
 }

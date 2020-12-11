@@ -41,6 +41,8 @@ const decodeHeader = req => {
 const check = {
    own: (req, owner) => {
       const { data } = decodeHeader(req);
+      console.log(data);
+      console.log(owner);
       if(data.id !== owner) {
          throw error('Not have permission', 401);
       }
