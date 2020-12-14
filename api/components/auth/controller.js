@@ -12,7 +12,6 @@ module.exports = (injectStore = require('../../../store/dummy')) => {
          delete data.password;
          return jwt.sign(data);
       } else {
-         console.log('pass invalid');
          throw new Error('Invalid data');
       }
    }

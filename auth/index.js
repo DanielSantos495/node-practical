@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const decode = require('jsonwebtoken/decode');
 const config = require('../config');
 const error = require('../utils/error');
 
@@ -33,7 +34,7 @@ const decodeHeader = req => {
    const decoded = verify(token);
 
    req.user = decoded;
-
+   console.log(decoded, 'token');
    return decoded;
 }
 
@@ -41,12 +42,17 @@ const decodeHeader = req => {
 const check = {
    own: (req, owner) => {
       const { data } = decodeHeader(req);
-      console.log(data);
-      console.log(owner);
+
       if(data.id !== owner) {
          throw error('Not have permission', 401);
       }
    },
+   logged: req => {
+      const { data } = decodeHeader(req);
+      if (!data) {
+         throw error('Not have logged', 401);
+      }
+   }
 }
 
 module.exports = {

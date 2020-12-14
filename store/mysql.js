@@ -67,6 +67,7 @@ const insert = (table, data) => {
          if (error) {
             reject(error);
          }
+         console.log(result)
          resolve(result);
       });
    })
@@ -86,9 +87,17 @@ const update = (table, data) => {
 }
 
 const upsert = async (table, data) => {
-   const be = await get(table, data.id);
+
+   let be = [];
+   // Como la data de followers no viene con id, no se genera nada y pasa a 'post normal'
+   console.log(table, 'mysql')
+   if (data.id) {
+      be = await get(table, data.id);
+   }
+
    if(be.length > 0) {
       console.log('update')
+      console.log(table)
       return update(table, data)
    } else {
       console.log('post normal')
@@ -96,15 +105,29 @@ const upsert = async (table, data) => {
    }
 }
 
-const query = (table, query) => {
+
+const query = (table, query, join) => {
+
+   let joinQuery = '';
+
+   if (join) {
+      const key = Object.keys(join)[0];
+      const value = join[key];
+      console.log(key, 'key')
+      console.log(value, 'value')
+      // Estudiar más queries de mysql
+      joinQuery = `JOIN ${key} ON ${table}.${value} = ${key}.id`;
+      console.log(joinQuery);
+   }
    return new Promise((resolve, reject) => {
       /*El '?' despúes de WHERE es un comodín que nos completa toda la expresión y data es el valor */
-      connection.query(`SELECT * FROM ${table} WHERE ?`, query, (error, data) => {
+      // connection.query(`SELECT * FROM ${table} WHERE ?`
+      connection.query(`SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`, query, (error, data) => {
          if (error) {
             reject(error);
          }
          resolve(data[0] || null);
-      })
+      });
    })
 }
 
