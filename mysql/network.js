@@ -1,4 +1,3 @@
-const { Route } = require('express');
 const express = require('express');
 const response = require('../network/response');
 const store = require('../store/mysql');
@@ -37,7 +36,7 @@ const insert = async (req, res, next) => {
 const upsert = async (req, res, next) => {
    const { params, body } = req;
    try {
-      const data = await store.upser(params.table, body);
+      const data = await store.upsert(params.table, body);
       response.success(req, res, data, 200);
    } catch(error) {
       next(error);
