@@ -1,4 +1,5 @@
 module.exports = {
+   remoteDB: process.env.REMOTE_DB || false,
    api: {
       port: process.env.PORT || 3000,
    },
@@ -10,6 +11,9 @@ module.exports = {
       user: process.env.MYSQL_USER || 'y97g1jcUYZ',
       password: process.env.MYSQL_PASS || 'jkPDnEOJSK',
       database: process.env.MYSQL_DB || 'y97g1jcUYZ'
+   },
+   post: {
+      port: process.env.POST_PORT || 3002
    },
    mysqlService: {
       host: process.env.MYSQL_SERV_HOST || 'localhost',

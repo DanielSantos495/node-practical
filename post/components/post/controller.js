@@ -1,5 +1,4 @@
 const { nanoid } = require('nanoid');
-const error = require('../../../utils/error');
 const TABLE = 'post'
 
 module.exports = (injectStore = require('../../../store/dummy')) => {
