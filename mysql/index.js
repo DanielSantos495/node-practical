@@ -14,4 +14,4 @@ app.listen(mysqlService.port, error => {
       console.error('Error starting the server');
    }
    console.log(`Mysql service watching in: ${mysqlService.port}`)
-})
+});
